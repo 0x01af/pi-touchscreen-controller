@@ -1,0 +1,16 @@
+[Unit]
+Description=service for the pi-touchscreen-controller
+Requires=network-online.target mnt-nas_medien.mount
+After=network-online.target mnt-nas_medien.mount
+
+[Service]
+ExecStart=/usr/local/bin/start-pi-touchscreen-controller.sh
+Nice=19
+WorkingDirectory=/usr/local/bin
+StandardOutput=file:/tmp/pi-touchscreen-controller.log
+StandardError=file:/tmp/pi-touchscreen-controller.log
+Restart=no
+User=root
+
+[Install]
+WantedBy=multi-user.target
