@@ -12,4 +12,4 @@ $(EXEC): $(OBJECTS)
 	$(CC) -c $(CC_FLAGS) $< -o $@
 
 clean:
-	rm -f $(EXEC) $(OBJECTS)
+	rm -f $(OBJECTS)
