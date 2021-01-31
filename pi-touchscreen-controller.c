@@ -210,7 +210,23 @@ int main(int argc, char* argv[]){
                        	if(event_size != -1) {
 				/* STATE CHANGE: touch event raised */
 				t_last_touch = t_now;
+				/*
+				Feature Request: Improve touch event handling
+				Description:
+				- tap: reset some state
+					1. reset screen brightness from blank & dimmer events to photoframe
+					2. reset paused photoframe to running photoframe
+					3. reset screen to browser in kiosk mode
+				- long press: pause photoframe
+				(based on https://material.io/design/interaction/gestures.html#principles)
 
+				Implementation ideas:
+				- main procedure needs to be cleaned, should only handling events (touch and time)
+				- create new "touchscreen-eventhandler"
+				- create new "time-eventhandler"
+				(based on https://ozzmaker.com/programming-a-touchscreen-on-the-raspberry-pi/)
+
+				*/
 				/* reset screen brightness from blank & dimmer events */
                 		if (current_state > 2) {
         	                  	printf("%s Value: %d, Code: %x\n", device[i], event[0].value, event[0].code);
