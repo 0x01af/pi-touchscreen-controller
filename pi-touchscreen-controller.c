@@ -317,6 +317,17 @@ int main(int argc, char* argv[]){
                 }
 
 		/* blank touchscreen if blank_timeout is over */
+		/*
+			Feature Request: Blank touchscreen only during night (given time range/s)			
+			Description:
+			- blank touchscreen after reaching start time
+			- unblank touchscreen after reaching end time
+			- allow multiple time ranges for blanking (eg. night and working time)
+			
+			Implementation ideas:
+			- getting the time see https://www.gnu.org/software/libc/manual/html_node/Getting-the-Time.html
+			
+		*/
 		if(current_state == 3 && difftime(t_now, t_last_touch) > (slide_timeout + dimmer_timeout + blank_timeout)) {
 			printf("STATE CHANGE: blank_timeout reached\n");
 			current_state = 4;
