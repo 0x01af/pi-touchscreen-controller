@@ -8,7 +8,7 @@
 slide_timeout=1 # minute
 
 #EDIT THIS VALUE to set the path, where slide find pictures
-slide_pictures=/mnt/nas_medien/trips
+slide_pictures=/mnt/nas_photoframe
 
 #EDIT THIS VALUE to set the period before it will dim
 dimmer_timeout=30 # minutes
