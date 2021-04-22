@@ -358,9 +358,23 @@ main(int argc, char* argv[])
 			- allow multiple time ranges for blanking (eg. night and working time)
 			
 			Implementation ideas:
-			- getting the time see https://www.gnu.org/software/libc/manual/html_node/Getting-the-Time.html
-			
+			- getting the time see https://www.gnu.org/software/libc/manual/html_node/Getting-the-Time.html	
 		*/
+		/* PSEUDO CODE
+		struct tm *tm_now;
+		struct tm *tm_blank;
+		struct tm *tm_unblank;
+		
+		set tm_blank
+		set tmb_unblank
+		
+		tm_now = localtime(&t_now);
+		
+		if(tm_now.tm_hour == tm_blank.tm_hour && tm_now.tm_min == tm_blank.tm_min) than blank
+		if(tm_now.tm_hour == tm_unblank.tm_hour && tm_now.tm_min == tm_unblank.tm_min) than unblank
+				
+		END PSEUDO CODE */
+		
 		if(current_state == 3 && difftime(t_now, t_last_touch) > (slide_timeout + dimmer_timeout + blank_timeout)) {
 			printf("STATE CHANGE: blank_timeout reached\n");
 			current_state = 4;
