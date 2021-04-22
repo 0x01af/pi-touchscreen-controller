@@ -1,7 +1,8 @@
 [Unit]
 Description=service for the pi-touchscreen-controller
-Requires=network-online.target mnt-nas_medien.mount
-After=network-online.target mnt-nas_medien.mount
+Requires=network-online.target
+After=network-online.target
+# Requires/After=mnt-nas_medien.mount
 
 [Service]
 ExecStart=/usr/local/bin/start-pi-touchscreen-controller.sh
