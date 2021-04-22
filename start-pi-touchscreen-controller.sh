@@ -5,20 +5,20 @@
 # Best to run this script from /etc/rc.local to start at boot.
 
 #EDIT THIS VALUE to set the period before slide will start
-slide_timeout=120 # seconds (2min)
+slide_timeout=1 # minute
 
 #EDIT THIS VALUE to set the path, where slide find pictures
 slide_pictures=/mnt/nas_medien/trips
 
 #EDIT THIS VALUE to set the period before it will dim
-dimmer_timeout=1800 # seconds (30min)
+dimmer_timeout=30 # minutes
 
 #EDIT THIS VALUE to set the brightness it dims the display to.
 #50-253, minimum value is 50, blanking the screen will be done after blank timeout
 min_brightness=100
 
 #EDIT THIS VALUE to set the period before it will blank the screen
-blank_timeout=12600 # seconds (4h since slide_timeout)
+blank_period=23:00-07:00 
 
 # Find the device the touchscreen uses.  This can change depending on
 # other input devices (keyboard, mouse) are connected at boot time.
@@ -36,4 +36,4 @@ blank_timeout=12600 # seconds (4h since slide_timeout)
 #        fi
 #done
 
-pi-touchscreen-controller $slide_timeout $slide_pictures $dimmer_timeout $min_brightness $blank_timeout event0
+pi-touchscreen-controller $slide_timeout $slide_pictures $dimmer_timeout $min_brightness $blank_period event0
