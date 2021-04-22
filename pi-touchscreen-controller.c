@@ -17,6 +17,7 @@
    2021-01-01 Olaf Sonderegger add slide
    2021-01-02 Olaf Sonderegger add blanking touchscreen
    2021-01-03 Olaf Sonderegger bugfixing child process handling, add better error handling
+   2021-04-22 Olaf Sonderegger add blanking during time period
 */
 
 #include <stdio.h>
@@ -154,16 +155,16 @@ main(int argc, char* argv[])
   printf ("Minimum brightness = %d\n", min_brightness);
 
   char blank_period[11];
-  strcpy(blank_perido, argv[5]);
+  strcpy(blank_period, argv[5]);
   char delimiter[] = ":-";
 
-  tm_blank.tm_min = atoi(strtok(blank_period, delimeter));
-  tm_blank.tm_hour = atoi(strtok(NULL, delimeter));
-  tm_unblank.tm_min = atoi(strtok(NULL, delimeter));
-  tm_unblank.tm_hour = atoi(strtok(NULL, delimeter));
+  tm_blank->tm_min = atoi(strtok(blank_period, delimiter));
+  tm_blank->tm_hour = atoi(strtok(NULL, delimiter));
+  tm_unblank->tm_min = atoi(strtok(NULL, delimiter));
+  tm_unblank->tm_hour = atoi(strtok(NULL, delimiter));
   printf("blank_period = %d:%d until %d:%d\n",
-          tm_blank.tm_hour, tm_blank.tm_min,
-          tm_unblank.tm_hour, tm_unblank.tm_hour);
+          tm_blank->tm_hour, tm_blank->tm_min,
+          tm_unblank->tm_hour, tm_unblank->tm_hour);
   // see also: https://www.codingame.com/playgrounds/14213/how-to-play-with-strings-in-c/string-split
 	
   int num_dev = argc - 6;
@@ -363,7 +364,7 @@ main(int argc, char* argv[])
     // blank touchscreen if blank_time has been reached
     // (see also: https://www2.hs-fulda.de/~klingebiel/c-stdlib/time.htm)
     // Feature Request: Allow multiple time ranges for blanking (eg. night and working time)
-    if(current_state < 10 && tm_now.tm_hour == tm_blank.tm_hour && tm_now.tm_min == tm_blank.tm_min) {
+    if(current_state < 10 && tm_now->tm_hour == tm_blank->tm_hour && tm_now->tm_min == tm_blank->tm_min) {
       printf("STATE CHANGE: blank_time reached\n");
       current_state = 10;
       actual_brightness = current_brightness;
@@ -379,7 +380,7 @@ main(int argc, char* argv[])
     }
 
     // unblank touchscreen if touchscreen is still blank AND unblank_time has been reached
-    if(current_state == 10 && tm_now.tm_hour == tm_unblank.tm_hour && tm_now.tm_min == tm_unblank.tm_min) {
+    if(current_state == 10 && tm_now->tm_hour == tm_unblank->tm_hour && tm_now->tm_min == tm_unblank->tm_min) {
       current_brightness = actual_brightness;
       printf("Brightness now %d\n", current_brightness);
       fprintf(brightfd, "%d\n", current_brightness);
