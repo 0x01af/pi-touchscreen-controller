@@ -32,48 +32,83 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-long int readint(char* filenm) {
-	FILE* filefd;
-	filefd = fopen(filenm, "r");
-        if(filefd == NULL){
-                int err = errno;
-                printf("Error opening %s file: %d", filenm, err);
-                exit(1);
-        }
+/* MACRO exitOnError(topic) - Add a topic to stderr message, and exit the program.
+ * see also: https://stackoverflow.com/questions/154136/why-use-apparently-meaningless-do-while-and-if-else-statements-in-macros/154138#154138
+ */
+#define exitOnError(topic) do { perror(topic); \
+                                exit(EXIT_FAILURE); \
+                              } while (0)
 
-	char number[10];
-	char* end;
-	fscanf(filefd, "%s", &number);
-	printf("File: %s ,The number is: %s\n",filenm, number);
+/* function msleep(msec) - Sleep for the requested number of milliseconds.
+ * see also: https://stackoverflow.com/questions/1157209/is-there-an-alternative-sleep-function-in-c-to-milliseconds
+ */
+int
+msleep(long msec)
+{
+  struct timespec ts;
+  int res;
 
-	fclose(filefd);
-	return strtol(number,&end,10);
+  if (msec < 0) {
+    errno = EINVAL;
+    return -1;
+  }
+
+  ts.tv_sec = msec / 1000;
+  ts.tv_nsec = (msec % 1000) * 1000000;
+
+  do {
+    res = nanosleep(&ts, &ts);
+  } while (res && errno == EINTR);
+
+  return res;
 }
 
-int main(int argc, char* argv[]){
+long int
+readint(char* filenm)
+{
+  FILE* filefd;
+  filefd = fopen(filenm, "r");
+  if(filefd == NULL){
+    int err = errno;
+    printf("Error opening %s file: %d", filenm, err);
+    exit(1);
+  }
+  
+  char number[10];
+  char* end;
+  fscanf(filefd, "%s", &number);
+  printf("File: %s ,The number is: %s\n",filenm, number);
+  
+  fclose(filefd);
 
-	printf("\n***\npi-touch-controller v2020-01-02\n(c) 2021 Olaf Sonderegger\n***\n\n");
+  return strtol(number,&end,10);
+}
 
-        if (argc < 4) {
-                printf("Usage: timeout <slide_timeout_sec> <slide_pictures_path> <dimmer_timeout_sec> <min_brightness> <blank_timeout_sec> <device> [<device>...]\n");
-		printf("    slide_timeout: seconds after last touch event\n");
-		printf("    dimmer_timeout: seconds after slide has been started (0 = immediately)\n");
-		printf("    min_brightness: brightness value of screen (254 = max. value; 50 = allowed min. value)\n");
-		printf("    blank_timeout: seconds after screen has been dimmed (0 = immediately)\n");
-                printf("    Use lsinput to see input devices.\n");
-                printf("    Device to use is shown as /dev/input/<device>\n");
-                exit(1);
-        }
+int
+main(int argc, char* argv[])
+{
+  printf("\n***\npi-touch-controller v2021-04-22\n(c) 2021 Olaf Sonderegger\n***\n\n");
 
-        int i;
-        int tlen;
-	struct stat sb;
+  if (argc < 4) {
+    printf("Usage: timeout <slide_timeout_sec> <slide_pictures_path> <dimmer_timeout_sec> <min_brightness> <blank_timeout_sec> <device> [<device>...]\n");
+    printf("    slide_timeout: seconds after last touch event\n");
+    printf("    dimmer_timeout: seconds after slide has been started (0 = immediately)\n");
+    printf("    min_brightness: brightness value of screen (254 = max. value; 50 = allowed min. value)\n");
+    printf("    blank_timeout: seconds after screen has been dimmed (0 = immediately)\n");
+    printf("    Use lsinput to see input devices.\n");
+    printf("    Device to use is shown as /dev/input/<device>\n");
+    exit(1);
+  }
 
-        int slide_timeout;
-        char slide_pictures[255];
-        int dimmer_timeout;
-	int min_brightness;
-	int blank_timeout;
+  int i;
+  int tlen;
+  struct stat sb;
+ 
+  int slide_timeout;
+  char slide_pictures[255];
+  int dimmer_timeout;
+  int min_brightness;
+  int blank_timeout;
 
 	tlen = strlen(argv[1]);
 	for (i=0;i<tlen; i++)
@@ -155,12 +190,7 @@ int main(int argc, char* argv[]){
 	long int max_brightness;
 	long int current_brightness;
 
-        /* new sleep code to bring CPU usage down from 100% on a core */
-        struct timespec sleepTime;
-        sleepTime.tv_sec = 0;
-        sleepTime.tv_nsec = 100000000L;  /* 1 seconds - larger values may reduce load even more */
-
-	/* char actual[53] = "/sys/class/backlight/rpi_backlight/actual_brightness";*/
+  	/* char actual[53] = "/sys/class/backlight/rpi_backlight/actual_brightness";*/
 	char max[50] = "/sys/class/backlight/rpi_backlight/max_brightness";
   	char bright[46] = "/sys/class/backlight/rpi_backlight/brightness";
 
@@ -281,8 +311,11 @@ int main(int argc, char* argv[]){
 				current_state = -1;
 			}
 			if (slideshow_pid == 0) {
-				/* child process - will be replaced by slide */
+				// child process - will be replaced by slide
 				printf("Slide will be started... (slide process id: %d)\n", slideshow_pid);
+				/*
+				 * IMPROVE: path to .Xauthority configurable or auto detectable
+				 */
 				char *env[] = { "DISPLAY=:0.0", "XAUTHORITY=/home/snarlhcu01/.Xauthority", (char *) NULL };
 				execle("/usr/local/bin/slide",
 					"slide",
@@ -291,15 +324,15 @@ int main(int argc, char* argv[]){
 					"-s",
 					"-r",
 					(char *) NULL, env);
+				// child process - error happened during starting the child
 				printf("FATAL ERROR: Slide did not correctly start - %s\n", strerror(errno));
-				/* stop child process */
 				exit(EXIT_FAILURE);
 			}
-			/* parent process */
+			// parent process
 			printf("Slide has been started... (slide process id: %d)\n", slideshow_pid);
 		}
 
-		/* dimm touchscreen if dimmer_timeout is over */
+		// dimm touchscreen if dimmer_timeout is over
 		if(current_state == 2 && difftime(t_now, t_last_touch) > (slide_timeout + dimmer_timeout)) {
 			printf("STATE CHANGE: dimmer_timeout reached\n");
 			current_state = 3;
@@ -312,7 +345,7 @@ int main(int argc, char* argv[]){
 				fflush(brightfd);
 				fseek(brightfd, 0, SEEK_SET);
 
-				nanosleep(&sleepTime, NULL);
+				msleep(1000);
 			}
                 }
 
@@ -340,24 +373,24 @@ int main(int argc, char* argv[]){
 				fflush(brightfd);
 				fseek(brightfd, 0, SEEK_SET);
 
-				nanosleep(&sleepTime, NULL);
+				msleep(1000);
 			}
 		}
 
-                nanosleep(&sleepTime, NULL);
-        }
+    msleep(1000);
+  } // while (current_state != -1)
 
-	printf("STATE CHANGE: error happened... reset everything and exit");
+  printf("STATE CHANGE: error happened... reset everything and exit");
 
-	printf("Resetting brightness...\n");
-	fprintf(brightfd, "%d\n", actual_brightness);
-	fflush(brightfd);
-	fseek(brightfd, 0, SEEK_SET);
-	fclose(brightfd);
+  printf("Resetting brightness...\n");
+  fprintf(brightfd, "%d\n", actual_brightness);
+  fflush(brightfd);
+  fseek(brightfd, 0, SEEK_SET);
+  fclose(brightfd);
 
-	printf("Killing child processes...\n");
-	kill(slideshow_pid, SIGKILL);
-	waitpid(slideshow_pid, NULL, 0);
+  printf("Killing child processes...\n");
+  kill(slideshow_pid, SIGKILL);
+  waitpid(slideshow_pid, NULL, 0);
 
-	exit(EXIT_SUCCESS);
+  exit(EXIT_SUCCESS);
 }
