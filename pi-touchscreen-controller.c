@@ -154,23 +154,22 @@ main(int argc, char* argv[])
   }
   printf ("Minimum brightness = %d\n", min_brightness);
 
-  printf ("debug 0-a");
   char blank_period[11];
   strcpy(blank_period, argv[5]);
   char delimiter[] = ":-";
+  
+  tm_blank->tm_hour = atoi(strtok(blank_period, delimiter));
 
-  printf ("debug 0-b");
-  char * temp = strtok(blank_period, delimiter);
+  char * temp = strtok(NULL, delimiter);
   printf ("debug 1 = %c\n", temp);
-  tm_blank->tm_hour = atoi(temp);
+  tm_blank->tm_min = atoi(temp);
   printf ("debug 2 = %d\n", tm_blank->tm_hour);
-  // tm_blank->tm_hour = atoi(strtok(blank_period, delimiter));
-  tm_blank->tm_min = atoi(strtok(NULL, delimiter));
+  // tm_blank->tm_min = atoi(strtok(NULL, delimiter));
   tm_unblank->tm_hour = atoi(strtok(NULL, delimiter));
   tm_unblank->tm_min = atoi(strtok(NULL, delimiter));
   printf("blank_period = %d:%d until %d:%d\n", \
           tm_blank->tm_hour, tm_blank->tm_min, \
-          tm_unblank->tm_hour, tm_unblank->tm_hour);
+          tm_unblank->tm_hour, tm_unblank->tm_min);
   // see also: https://www.codingame.com/playgrounds/14213/how-to-play-with-strings-in-c/string-split
 	
   int num_dev = argc - 6;
