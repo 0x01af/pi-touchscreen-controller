@@ -154,7 +154,7 @@ main(int argc, char* argv[])
   }
   printf ("Minimum brightness = %d\n", min_brightness);
 
-  char blank_period[11];
+  char blank_period[12];
   strcpy(blank_period, argv[5]);
   char delimiter[] = ":-";
   
