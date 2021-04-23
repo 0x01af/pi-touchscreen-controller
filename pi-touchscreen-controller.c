@@ -158,7 +158,9 @@ main(int argc, char* argv[])
   strcpy(blank_period, argv[5]);
   char delimiter[] = ":-";
   
+  printf ("debug 0-a");
   tm_blank->tm_hour = atoi(strtok(blank_period, delimiter));
+  printf ("debug 0-b");
 
   char * temp = strtok(NULL, delimiter);
   printf ("debug 1 = %c\n", temp);
