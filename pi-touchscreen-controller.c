@@ -159,20 +159,19 @@ main(int argc, char* argv[])
   strcpy(blank_period, argv[5]);
   printf ("blank_period defined = %s\n", blank_period);
   char delimiter[2] = ":-";
-  
-  printf ("debug start\n");
-  // error segmentation_error !
+
   char * temp = strtok(blank_period, delimiter);
-  printf ("debug 1 = %c\n", temp);
   tm_blank->tm_hour = atoi(temp);
-  printf ("debug 2 = %d\n", tm_blank->tm_hour);
+
   temp = strtok(NULL, delimiter);
-  printf ("debug 3 = %c\n", temp);
   tm_blank->tm_min = atoi(temp);
-  printf ("debug 4 = %d\n", tm_blank->tm_min);
-  // tm_blank->tm_min = atoi(strtok(NULL, delimiter));
-  tm_unblank->tm_hour = atoi(strtok(NULL, delimiter));
-  tm_unblank->tm_min = atoi(strtok(NULL, delimiter));
+
+  temp = strtok(NULL, delimiter);
+  tm_unblank->tm_hour = atoi(temp);
+
+  temp = strtok(NULL, delimiter);
+  tm_unblank->tm_min = atoi(temp);
+
   printf("blank_period = %d:%d until %d:%d\n", \
           tm_blank->tm_hour, tm_blank->tm_min, \
           tm_unblank->tm_hour, tm_unblank->tm_min);
