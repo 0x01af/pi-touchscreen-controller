@@ -171,9 +171,10 @@ main(int argc, char* argv[])
 
   temp = strtok(NULL, delimiter);
   tm_unblank->tm_min = atoi(temp);
-
-  printf("blank_period = %d:%d until %d:%d\n", \
-          tm_blank->tm_hour, tm_blank->tm_min, \
+  printf ("Debug\n");
+	
+  printf("blank_period = %d:%d until %d:%d\n",
+          tm_blank->tm_hour, tm_blank->tm_min,
           tm_unblank->tm_hour, tm_unblank->tm_min);
   // see also: https://www.codingame.com/playgrounds/14213/how-to-play-with-strings-in-c/string-split
 	
