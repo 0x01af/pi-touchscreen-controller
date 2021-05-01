@@ -154,15 +154,16 @@ main(int argc, char* argv[])
   }
   printf ("Minimum brightness = %d\n", min_brightness);
 
-  char blank_period[] = "00:00-00:00"; // default value
   printf ("debug 0-a");
-  strcpy(blank_period, argv[5]);
+  char blank_period[] = "00:00-00:00"; // default value
   printf ("debug 0-b");
+  strcpy(blank_period, argv[5]);
+  printf ("debug 0-c");
   char delimiter[2] = ":-";
   
-  printf ("debug 0-c");
-  tm_blank->tm_hour = atoi(strtok(blank_period, delimiter));
   printf ("debug 0-d");
+  tm_blank->tm_hour = atoi(strtok(blank_period, delimiter));
+  printf ("debug 0-e");
 
   char * temp = strtok(NULL, delimiter);
   printf ("debug 1 = %c\n", temp);
