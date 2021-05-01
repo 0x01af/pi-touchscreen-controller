@@ -109,8 +109,11 @@ main(int argc, char* argv[])
   char slide_pictures[255];
   int dimmer_timeout;
   int min_brightness;
-  struct tm *tm_blank;
-  struct tm *tm_unblank;
+  // BUG: struct tm *tm_blank and *tm_unblank points both to the same time structure
+  // see https://stackoverflow.com/questions/3047002/two-separate-tm-structs-mirroring-each-other
+  // Bugfix: remove pointers
+  struct tm tm_blank;
+  struct tm tm_unblank;
 
   tlen = strlen(argv[1]);
   for (i=0;i<tlen; i++)
