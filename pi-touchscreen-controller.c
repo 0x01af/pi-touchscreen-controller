@@ -162,17 +162,20 @@ main(int argc, char* argv[])
 
   char * temp = strtok(blank_period, delimiter);
   tm_blank->tm_hour = atoi(temp);
+  printf ("Debug 1\n");
 
   temp = strtok(NULL, delimiter);
   tm_blank->tm_min = atoi(temp);
+  printf ("Debug 2\n");
 
   temp = strtok(NULL, delimiter);
   tm_unblank->tm_hour = atoi(temp);
+  printf ("Debug 3\n");
 
   temp = strtok(NULL, delimiter);
   tm_unblank->tm_min = atoi(temp);
-  printf ("Debug\n");
-	
+  printf ("Debug 4\n");
+
   printf("blank_period = %d:%d until %d:%d\n",
           tm_blank->tm_hour, tm_blank->tm_min,
           tm_unblank->tm_hour, tm_unblank->tm_min);
