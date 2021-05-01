@@ -154,21 +154,22 @@ main(int argc, char* argv[])
   }
   printf ("Minimum brightness = %d\n", min_brightness);
 
-  printf ("debug 0-a\n");
   char blank_period[] = "00:00-00:00"; // default value
-  printf ("debug 0-b\n");
+  printf ("blank_period default = %s\n", blank_period);
   strcpy(blank_period, argv[5]);
-  printf ("debug 0-c\n");
+  printf ("blank_period defined = %s\n", blank_period);
   char delimiter[2] = ":-";
   
-  printf ("debug 0-d\n");
-  tm_blank->tm_hour = atoi(strtok(blank_period, delimiter));
-  printf ("debug 0-e\n");
-
-  char * temp = strtok(NULL, delimiter);
+  printf ("debug start\n");
+  // error segmentation_error !
+  char * temp = strtok(blank_period, delimiter);
   printf ("debug 1 = %c\n", temp);
-  tm_blank->tm_min = atoi(temp);
+  tm_blank->tm_hour = atoi(temp);
   printf ("debug 2 = %d\n", tm_blank->tm_hour);
+  temp = strtok(NULL, delimiter);
+  printf ("debug 3 = %c\n", temp);
+  tm_blank->tm_min = atoi(temp);
+  printf ("debug 4 = %d\n", tm_blank->tm_min);
   // tm_blank->tm_min = atoi(strtok(NULL, delimiter));
   tm_unblank->tm_hour = atoi(strtok(NULL, delimiter));
   tm_unblank->tm_min = atoi(strtok(NULL, delimiter));
