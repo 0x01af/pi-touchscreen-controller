@@ -88,7 +88,7 @@ readint(char* filenm)
 int
 main(int argc, char* argv[])
 {
-  printf("\n***\npi-touch-controller v2021-04-22\n(c) 2021 Olaf Sonderegger\n***\n\n");
+  printf("\n***\npi-touch-controller v2021-05-01\n(c) 2021 Olaf Sonderegger\n***\n\n");
 
   if (argc < 4) {
     printf("Usage: timeout <slide_timeout_sec> <slide_pictures_path> <dimmer_timeout_sec> <min_brightness> <blank_timeout_sec> <device> [<device>...]\n");
