@@ -18,7 +18,7 @@ dimmer_timeout=30 # minutes
 min_brightness=100
 
 #EDIT THIS VALUE to set the period before it will blank the screen
-blank_period=23:00-07:00 
+blank_period="23:00-07:00"
 
 # Find the device the touchscreen uses.  This can change depending on
 # other input devices (keyboard, mouse) are connected at boot time.
