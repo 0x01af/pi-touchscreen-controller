@@ -111,7 +111,7 @@ main(int argc, char* argv[])
   int min_brightness;
   // BUG: struct tm *tm_blank and *tm_unblank points both to the same time structure
   // see https://stackoverflow.com/questions/3047002/two-separate-tm-structs-mirroring-each-other
-  // Bugfix: remove pointers
+  // Bugfix: remove pointers * from declaration, change object use from x->y to x.y
   struct tm tm_blank;
   struct tm tm_unblank;
 
@@ -164,29 +164,29 @@ main(int argc, char* argv[])
   char delimiter[2] = ":-";
 
   char * temp = strtok(blank_period, delimiter);
-  tm_blank->tm_hour = atoi(temp);
+  tm_blank.tm_hour = atoi(temp);
   printf ("Debug 1\n");
 
   temp = strtok(NULL, delimiter);
-  tm_blank->tm_min = atoi(temp);
+  tm_blank.tm_min = atoi(temp);
   printf ("Debug 2\n");
 
   temp = strtok(NULL, delimiter);
   printf ("Debug 2a = %s\n", temp);
-  tm_unblank->tm_hour = atoi(temp);
+  tm_unblank.tm_hour = atoi(temp);
   printf ("Debug 2b\n");
-  printf ("Debug 2c = %d\n", tm_unblank->tm_hour);
+  printf ("Debug 2c = %d\n", tm_unblank.tm_hour);
   printf ("Debug 3\n");
 
   temp = strtok(NULL, delimiter);
-  tm_unblank->tm_min = atoi(temp);
+  tm_unblank.tm_min = atoi(temp);
   printf ("Debug 4\n");
 
   printf("blank_period = %d:%d until %d:%d\n",
-          tm_blank->tm_hour, tm_blank->tm_min,
-          tm_unblank->tm_hour, tm_unblank->tm_min);
+          tm_blank.tm_hour, tm_blank.tm_min,
+          tm_unblank.tm_hour, tm_unblank.tm_min);
   // see also: https://www.codingame.com/playgrounds/14213/how-to-play-with-strings-in-c/string-split
-	
+
   int num_dev = argc - 6;
   int eventfd[num_dev];
   char device[num_dev][32];
@@ -384,7 +384,7 @@ main(int argc, char* argv[])
     // blank touchscreen if blank_time has been reached
     // (see also: https://www2.hs-fulda.de/~klingebiel/c-stdlib/time.htm)
     // Feature Request: Allow multiple time ranges for blanking (eg. night and working time)
-    if(current_state < 10 && tm_now->tm_hour == tm_blank->tm_hour && tm_now->tm_min == tm_blank->tm_min) {
+    if(current_state < 10 && tm_now->tm_hour == tm_blank.tm_hour && tm_now->tm_min == tm_blank.tm_min) {
       printf("STATE CHANGE: blank_time reached\n");
       current_state = 10;
       actual_brightness = current_brightness;
@@ -400,7 +400,7 @@ main(int argc, char* argv[])
     }
 
     // unblank touchscreen if touchscreen is still blank AND unblank_time has been reached
-    if(current_state == 10 && tm_now->tm_hour == tm_unblank->tm_hour && tm_now->tm_min == tm_unblank->tm_min) {
+    if(current_state == 10 && tm_now->tm_hour == tm_unblank.tm_hour && tm_now->tm_min == tm_unblank.tm_min) {
       current_brightness = actual_brightness;
       printf("Brightness now %d\n", current_brightness);
       fprintf(brightfd, "%d\n", current_brightness);
