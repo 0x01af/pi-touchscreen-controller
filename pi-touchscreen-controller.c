@@ -17,7 +17,7 @@
    2021-01-01 Olaf Sonderegger add slide
    2021-01-02 Olaf Sonderegger add blanking touchscreen
    2021-01-03 Olaf Sonderegger bugfixing child process handling, add better error handling
-   2021-04-22 Olaf Sonderegger add blanking during time period
+   2021-05-01 Olaf Sonderegger add blanking during time period
 */
 
 #include <stdio.h>
@@ -109,9 +109,6 @@ main(int argc, char* argv[])
   char slide_pictures[255];
   int dimmer_timeout;
   int min_brightness;
-  // BUG: struct tm *tm_blank and *tm_unblank points both to the same time structure
-  // see https://stackoverflow.com/questions/3047002/two-separate-tm-structs-mirroring-each-other
-  // Bugfix: remove pointers * from declaration, change object use from x->y to x.y
   struct tm tm_blank;
   struct tm tm_unblank;
 
@@ -165,23 +162,15 @@ main(int argc, char* argv[])
 
   char * temp = strtok(blank_period, delimiter);
   tm_blank.tm_hour = atoi(temp);
-  printf ("Debug 1\n");
 
   temp = strtok(NULL, delimiter);
   tm_blank.tm_min = atoi(temp);
-  printf ("Debug 2\n");
 
   temp = strtok(NULL, delimiter);
-  printf ("Debug 2a = %s\n", temp);
   tm_unblank.tm_hour = atoi(temp);
-  printf ("Debug 2b\n");
-  printf ("Debug 2c = %d\n", tm_unblank.tm_hour);
-  printf ("Debug 3\n");
 
   temp = strtok(NULL, delimiter);
   tm_unblank.tm_min = atoi(temp);
-  printf ("Debug 4\n");
-
   printf("blank_period = %d:%d until %d:%d\n",
           tm_blank.tm_hour, tm_blank.tm_min,
           tm_unblank.tm_hour, tm_unblank.tm_min);
