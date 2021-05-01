@@ -169,7 +169,7 @@ main(int argc, char* argv[])
   printf ("Debug 2\n");
 
   temp = strtok(NULL, delimiter);
-  printf ("Debug 2a = %c\n", temp);
+  printf ("Debug 2a = %s\n", temp);
   tm_unblank->tm_hour = atoi(temp);
   printf ("Debug 2b = %d\n", tm_unblank->tm_hour);
   printf ("Debug 3\n");
