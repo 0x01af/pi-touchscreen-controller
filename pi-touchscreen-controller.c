@@ -154,7 +154,7 @@ main(int argc, char* argv[])
   }
   printf ("Minimum brightness = %d\n", min_brightness);
 
-  char blank_period[11];
+  char blank_period[] = "00:00-00:00"; // default value
   printf ("debug 0-a");
   strcpy(blank_period, argv[5]);
   printf ("debug 0-b");
