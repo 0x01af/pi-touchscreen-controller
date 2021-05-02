@@ -1,0 +1,15 @@
+[Unit]
+Description=Mounting the folder of slide_pictures
+Requires=serverctl.service
+After=serverctl.service
+Conflicts=shutdown.target
+ConditionPathExists=/mnt/nas_photoframe
+
+[Mount]
+What=//snarlsrv.mesh.local/photoframe
+Where=/mnt/nas_photoframe
+Options=vers=3.1.1,credentials=/etc/smbcredentials,noperm
+Type=cifs
+
+[Install]
+WantedBy=multi-user.target
