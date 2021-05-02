@@ -337,6 +337,8 @@ main(int argc, char* argv[])
         printf("Slide will be started... (slide process id: %d)\n", slideshow_pid);
         /*
          * IMPROVE REQUEST: path to .Xauthority configurable or auto detectable
+	 * Implementation ideas:
+	 * - move child process from root context to 'main' user context (https://stackoverflow.com/questions/19048015/linux-c-programming-execute-as-user)
 	 */
         char *env[] = { "DISPLAY=:0.0", "XAUTHORITY=/home/snarlhcu01/.Xauthority", (char *) NULL };
         execle("/usr/local/bin/slide",
