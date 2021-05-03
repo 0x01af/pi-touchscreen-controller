@@ -339,6 +339,7 @@ main(int argc, char* argv[])
          * IMPROVE REQUEST: path to .Xauthority configurable or auto detectable
 	 * Implementation ideas:
 	 * - move child process from root context to 'main' user context (https://stackoverflow.com/questions/19048015/linux-c-programming-execute-as-user)
+	 * - how to use as root the display of a normal user (https://www.pug.org/archive/mediawiki/index.php/Als_root_das_Display_des_Users_nutzen.html)
 	 */
         char *env[] = { "DISPLAY=:0.0", "XAUTHORITY=/home/snarlhcu01/.Xauthority", (char *) NULL };
         execle("/usr/local/bin/slide",
