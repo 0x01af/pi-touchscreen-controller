@@ -401,6 +401,7 @@ main(int argc, char* argv[])
       current_state = 2;
     }
 
+    // BUG: following sleep derange touchscreen event handling (after a tap actions could happen after 30seconds)
     msleep(30000); // sleep for 30 seconds
   } // while (current_state != -1)
 
